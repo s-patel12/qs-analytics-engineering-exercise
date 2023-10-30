@@ -1,0 +1,6 @@
+Improvements:
+- In the short term, while bar transaction data is still loaded from CSV files, I would like to have a subfolder within data/ that process_data.py will look in and run each CSV file. The relative filepath of the subfolder can be passed as a command-line argumement when the script is ran.
+- To do this, however, you would still need to look at the data beforehand as the POC showed that the data cleaning process for each CSV was different e.g. deliminators, timestamp, column names etc. therefore improvements can be made to load_transaction_bar() to account for these.
+- database_url currently defined in main(). Ideally would like to bring it out as a command-line argumement to pass into the pipeline, to allow the user more flexibility in choosing the database name. However, given that this is for Postgres RDS database, parameters such as username, password, host, port would also need to be added/set in config/encrypted/stored in cloud parameter store.
+- Logic to load transactions data is contained in a function (load_transaction_bar()), therefore easily replaced once transaction data is retrieved from an API.
+- Additonal columns can be added to Bar_Dim when data from more bars are being used e.g. bar_name, country
