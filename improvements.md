@@ -4,3 +4,4 @@ Improvements:
 - database_url currently defined in main(). Ideally would like to bring it out as a command-line argumement to pass into the pipeline, to allow the user more flexibility in choosing the database name. However, given that this is for Postgres RDS database, parameters such as username, password, host, port would also need to be added/set in config/encrypted/stored in cloud parameter store.
 - Logic to load transactions data is contained in a function (load_transaction_bar()), therefore easily replaced once transaction data is retrieved from an API.
 - Additonal columns can be added to Bar_Dim when data from more bars are being used e.g. bar_name, country
+- Refactor import_data_to_database() by reducing duplicated python code. At the moment there's too much code in that single function and one imporvement would be to break it down further and create more functions for sections that are similar.
