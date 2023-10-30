@@ -1,19 +1,16 @@
 -- Create Bars table
-DROP TABLE IF EXISTS Bars_Dim;
 CREATE TABLE IF NOT EXISTS Bars_Dim (
     bar_id INTEGER PRIMARY KEY AUTOINCREMENT,
     city VARCHAR(100)
 );
 
 -- Create Glass table
-DROP TABLE IF EXISTS Glass_Dim;
 CREATE TABLE IF NOT EXISTS Glass_Dim (
     glass_id INTEGER PRIMARY KEY AUTOINCREMENT,
     glass_name VARCHAR(100)
 );
 
 -- Create Glass Stock table
-DROP TABLE IF EXISTS Glass_Stock;
 CREATE TABLE IF NOT EXISTS Glass_Stock (
     glass_id INTEGER,
     bar_id INTEGER,
@@ -24,7 +21,6 @@ CREATE TABLE IF NOT EXISTS Glass_Stock (
 );
 
 -- Create Drinks table
-DROP TABLE IF EXISTS Drinks_Dim;
 CREATE TABLE IF NOT EXISTS Drinks_Dim (
     drink_id INTEGER PRIMARY KEY,
     drink_name VARCHAR(100),
@@ -33,7 +29,6 @@ CREATE TABLE IF NOT EXISTS Drinks_Dim (
 );
 
 -- Create Transactions table
-DROP TABLE IF EXISTS Transactions;
 CREATE TABLE IF NOT EXISTS Transactions (
     transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
     drink_id INTEGER,
