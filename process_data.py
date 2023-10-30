@@ -71,6 +71,8 @@ def create_transactions_df(bars):
 
 
 def create_bars_df(list1, list2, conn):
+
+    # Creating list of new bars not in Bars_Dim table, to be appended
     unique_bars = list(set(list1 + list2))
     bars = pd.read_sql('SELECT city FROM Bars_Dim', con = conn)
     flat_bar_list = [x[0] for x in bars.values.tolist()]
@@ -124,7 +126,7 @@ def import_data_to_database(engine, bars_list, glass_stock_df, transactions_df, 
 
     conn = engine.connect()
 
-    # Appending data to Bars_Dim table
+    # Appending new bar data to Bars_Dim table in database
     if bars_list:
         print("     Updating Bar_Dim table in database...")
         bars_df = pd.DataFrame(bars_list, columns=['city'])
@@ -138,7 +140,7 @@ def import_data_to_database(engine, bars_list, glass_stock_df, transactions_df, 
     glass_stock_df['bar_id'] = glass_stock_df['bar_id'].map(bars_dict)
     transactions_df['bar_id'] = transactions_df['bar_id'].map(bars_dict)
 
-    # Checking if new glasses need to be added to Glass_Dim
+    # Checking if new glass data needs to be added to Glass_Dim
     glasses = pd.read_sql('SELECT glass_name FROM Glass_Dim', con = conn)
     flat_glass_list = [x[0] for x in glasses.values.tolist()]
 
@@ -148,7 +150,7 @@ def import_data_to_database(engine, bars_list, glass_stock_df, transactions_df, 
 
     new_glasses = [item for item in unique_glasses if item not in flat_glass_list]
 
-    # Appending data to Glass_Dim table
+    # Appending new glass data to Glass_Dim table in database
     if new_glasses:
         print("     Updating Glass_Dim table in database...")
         glass_df = pd.DataFrame(new_glasses, columns=['glass_name'])
@@ -162,16 +164,16 @@ def import_data_to_database(engine, bars_list, glass_stock_df, transactions_df, 
     glass_stock_df['glass_id'] = glass_stock_df['glass_id'].map(glasses_dict)
     drinks_df['glass_id'] = drinks_df['glass_id'].map(glasses_dict)
 
-    # Replacing Glass_Stock table
+    # Replacing Glass_Stock table in database
     print("     Updating Glass_Stock table in database...")
     glass_stock_df.to_sql('Glass_Stock', engine, if_exists='replace', index=False)
 
-    # Checking if new drinks need to be added to Drinks_Dim
+    # Checking if new drinks data needs to be added to Drinks_Dim
     drinks = pd.read_sql('SELECT drink_id FROM Drinks_Dim', con = conn)
     flat_drinks_list = [x[0] for x in drinks.values.tolist()]
     new_drink_df = drinks_df[~drinks_df['drink_id'].isin(flat_drinks_list)]
 
-    # Appending data to Drinks_Dim
+    # Appending new drinks data to Drinks_Dim table in database
     if new_drink_df.empty:
         print("     Drinks_Dim table up-to-date in database.")
     else:
@@ -183,7 +185,7 @@ def import_data_to_database(engine, bars_list, glass_stock_df, transactions_df, 
     drinks_dict = drinks_sql.set_index('drink_name').to_dict()['drink_id']
     transactions_df['drink_id'] = transactions_df['drink_id'].map(drinks_dict)
 
-    # Appending data to Transactions
+    # Appending new bar transaction data to Transactions table in database
     print("     Updating Transactions table in database...")
     transactions_df.to_sql('Transactions', engine, if_exists='append', index=False)
 
